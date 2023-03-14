@@ -131,7 +131,7 @@ class LogisticRegressor(BaseRegressor):
             The predicted labels (y_pred) for given X.
         """
         # Calculate dot product of X with W.
-        y_hat = X.dot(self.W)
+        y_hat = np.dot(X, self.W)
 
         # Compute predictions using sigmoid function.
         preds = 1 / (1 + np.exp(-y_hat))
@@ -172,8 +172,9 @@ class LogisticRegressor(BaseRegressor):
             Vector of gradients.
         """
         y_pred = self.make_prediction(X)
-
+        # Calculate error.
+        error = y_true - y_pred
         # Calculate vector of gradients.
-        gradient = -np.dot(X.T, (y_true - y_pred)) / X.shape(0)
+        gradient = -np.mean(np.multiply(X.T, error).T, axis=0)
 
         return gradient
