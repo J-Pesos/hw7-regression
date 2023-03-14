@@ -117,8 +117,6 @@ class LogisticRegressor(BaseRegressor):
             max_iter=max_iter,
             batch_size=batch_size
         )
-        # Add 1 to the number of features to include bias term in model.
-        self.W = np.random.randn(num_feats + 1)
     
     def make_prediction(self, X) -> np.array:
         """

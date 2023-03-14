@@ -103,6 +103,9 @@ def test_training():
 	# For testing purposes, once you've added your code.
     # CAUTION: hyperparameters have not been optimized.
 	log_model = logreg.LogisticRegressor(num_feats=6, learning_rate=0.00001, tol=0.01, max_iter=10, batch_size=10)
+	
+	X_val = np.hstack([X_val, np.ones((X_val.shape[0], 1))])
+
 	log_model.train_model(X_train, y_train, X_val, y_val)
 
 	# Store initial weights to check against updated weights.
