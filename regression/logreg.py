@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 # (this is already complete!)
 class BaseRegressor():
 
-    def __init__(self, num_feats, learning_rate=0.01, tol=0.001, max_iter=100, batch_size=10):
+    def __init__(self, num_feats, learning_rate=0.01, tol=0.001, max_iter=100, batch_size=10, epsilon=1e-7):
 
         # Weights are randomly initialized
         self.W = np.random.randn(num_feats + 1).flatten()
@@ -16,6 +16,7 @@ class BaseRegressor():
         self.max_iter = max_iter
         self.batch_size = batch_size
         self.num_feats = num_feats
+        self.epsilon = epsilon
 
         # Define empty lists to store losses over training
         self.loss_hist_train = []
@@ -129,8 +130,14 @@ class LogisticRegressor(BaseRegressor):
         Returns: 
             The predicted labels (y_pred) for given X.
         """
-        pass
-    
+        # Calculate dot product of X with W.
+        y_hat = X.dot(self.W)
+
+        # Compute predictions using sigmoid function.
+        preds = 1 / (1 + np.exp(-y_hat))
+
+        return preds
+
     def loss_function(self, y_true, y_pred) -> float:
         """
         TODO: Implement binary cross entropy loss, which assumes that the true labels are either
@@ -143,7 +150,14 @@ class LogisticRegressor(BaseRegressor):
         Returns: 
             The mean loss (a single number).
         """
-        pass
+        # Prevent divisions by zero (no NaN or Inf values).
+        y_pred[y_pred == 0] = self.epsilon
+        y_pred[y_pred == 1] = 1 - self.epsilon
+
+        # Calculate mean loss.
+        mean_loss = -np.mean((y_true * np.log(y_pred)) + ((1 - y_true) * np.log(1 - y_pred)))
+        
+        return mean_loss
         
     def calculate_gradient(self, y_true, X) -> np.ndarray:
         """
@@ -157,4 +171,9 @@ class LogisticRegressor(BaseRegressor):
         Returns: 
             Vector of gradients.
         """
-        pass
+        y_pred = self.make_prediction(X)
+
+        # Calculate vector of gradients.
+        gradient = -np.dot(X.T, (y_true - y_pred)) / X.shape(0)
+
+        return gradient
