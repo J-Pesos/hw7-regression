@@ -100,12 +100,6 @@ def test_training():
 	# Load sample dataset.
 	X_train, X_val, y_train, y_val = utils.loadDataset(split_percent=0.8)
 
-	# Scale the data, since values vary across feature. Note that we
-    # fit on the training data and use the same scaler for X_val.
-	sc = StandardScaler()
-	X_train = sc.fit_transform(X_train)
-	X_val = sc.transform (X_val)
-
 	# For testing purposes, once you've added your code.
     # CAUTION: hyperparameters have not been optimized.
 	log_model = logreg.LogisticRegressor(num_feats=6, learning_rate=0.00001, tol=0.01, max_iter=10, batch_size=10)
