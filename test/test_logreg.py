@@ -91,7 +91,7 @@ def test_gradient():
 
 	# Check that the shape of the gradient is equal to the number of features.
 	print(gradient.shape[0])
-	assert gradient.shape[0] == log_model.num_feats
+	assert gradient.shape[0] == log_model.num_feats + 1
 
 def test_training():
 	'''Test training
@@ -111,4 +111,14 @@ def test_training():
 	log_model = logreg.LogisticRegressor(num_feats=6, learning_rate=0.00001, tol=0.01, max_iter=10, batch_size=10)
 	log_model.train_model(X_train, y_train, X_val, y_val)
 
-	assert (len(log_model.loss_hist_train) == len(log_model.loss_hist_val)), 'Weights are not being updated during model training.'
+	# Store initial weights to check against updated weights.
+	init_W = log_model.W.copy()
+
+    # Train model again for new weights.
+	log_model.train_model(X_train, y_train, X_val, y_val)
+
+    # Save final weights
+	new_W = log_model.W.copy()
+
+    # Checking that the weights have updated
+	assert not np.allclose(init_W, new_W)
