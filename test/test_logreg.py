@@ -87,10 +87,10 @@ def test_gradient():
 	log_model = logreg.LogisticRegressor(num_feats=6, learning_rate=0.00001, tol=0.01, max_iter=10, batch_size=10)
 
 	X_val = np.hstack([X_val, np.ones((X_val.shape[0], 1))])
-	gradient = log_model.calculate_gradient(y_train, X_train)
+	gradient = log_model.calculate_gradient(y_val, X_val)
 
 	# Check that the shape of the gradient is equal to the number of features.
-	assert gradient.shape[0] == log_model.num_feats
+	assert gradient.shape[0] == log_model.num_feats + 1
 
 def test_training():
 	'''Test training
